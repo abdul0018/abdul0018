@@ -22,28 +22,12 @@ const f = (s: number) => Math.round(s * FPS);
 // ---------------- shots (timeline seconds; src = where in the source take) ----------------
 type Shot = {a: number; b: number; src: number; s0: number; s1: number; fx: number; fy: number; box?: boolean};
 const SHOTS: Shot[] = [
-  {a: 0, b: 1.14, src: 0, s0: 1.0, s1: 1.05, fx: 0.6, fy: 0.45},
-  {a: 1.14, b: 2.5, src: 1.14, s0: 1.55, s1: 1.62, fx: 0.68, fy: 0.5},
-  {a: 2.5, b: 4.66, src: 2.5, s0: 1.0, s1: 1.05, fx: 0.55, fy: 0.4},
-  {a: 4.66, b: 5.52, src: 4.66, s0: 1.7, s1: 1.76, fx: 0.66, fy: 0.3},
-  {a: 5.52, b: 7.86, src: 5.52, s0: 2.0, s1: 2.25, fx: 0.42, fy: 0.74}, // wood top macro
-  {a: 7.86, b: 10.6, src: 7.86, s0: 1.1, s1: 1.02, fx: 0.55, fy: 0.4},
-  {a: 10.6, b: 11.46, src: 10.6, s0: 1.6, s1: 1.66, fx: 0.62, fy: 0.3},
-  {a: 11.46, b: 12.9, src: 22.0, s0: 1.9, s1: 2.0, fx: 0.4, fy: 0.8}, // chairs B-roll
-  {a: 12.9, b: 13.8, src: 12.9, s0: 1.4, s1: 1.45, fx: 0.6, fy: 0.4},
-  {a: 13.8, b: 15.4, src: 27.0, s0: 1.7, s1: 1.85, fx: 0.3, fy: 0.88}, // chairs B-roll
-  {a: 15.4, b: 17.2, src: 24.2, s0: 2.3, s1: 2.45, fx: 0.35, fy: 0.86}, // boucle macro
-  {a: 17.2, b: 18.6, src: 17.2, s0: 1.25, s1: 1.3, fx: 0.76, fy: 0.45},
-  {a: 18.6, b: 20.08, src: 18.6, s0: 1.75, s1: 1.8, fx: 0.77, fy: 0.42},
-  {a: 20.08, b: 22.0, src: 20.08, s0: 1.0, s1: 1.07, fx: 0.5, fy: 0.6}, // hero wide
-  {a: 22.0, b: 23.02, src: 9.0, s0: 1.75, s1: 1.82, fx: 0.2, fy: 0.95},
-  {a: 23.02, b: 25.36, src: 18.0, s0: 1.25, s1: 1.33, fx: 0.32, fy: 0.68, box: true}, // letterbox on paper
-  {a: 25.36, b: 26.52, src: 25.36, s0: 1.4, s1: 1.45, fx: 0.82, fy: 0.5},
-  {a: 26.52, b: 27.3, src: 26.52, s0: 1.8, s1: 1.85, fx: 0.82, fy: 0.5},
-  {a: 27.3, b: 28.5, src: 27.3, s0: 1.0, s1: 1.06, fx: 0.5, fy: 0.55},
-  {a: 28.5, b: SRC_DUR, src: 28.5, s0: 1.0, s1: 1.1, fx: 0.85, fy: 0.45},
+  // no zoom: original framing, straight through the take (lip-sync kept)
+  {a: 0, b: 23.02, src: 0, s0: 1, s1: 1, fx: 0.5, fy: 0.5},
+  {a: 23.02, b: 25.36, src: 23.02, s0: 1, s1: 1, fx: 0.5, fy: 0.5, box: true}, // letterbox on paper
+  {a: 25.36, b: SRC_DUR, src: 25.36, s0: 1, s1: 1, fx: 0.5, fy: 0.5},
 ];
-const BLUR_CUTS = [2.5, 13.8, 20.08, 23.02, 27.3, 28.5];
+const BLUR_CUTS = [2.5, 23.02, 25.36];
 
 const transformFor = (s: number, fx: number, fy: number, bw: number, bh: number) => {
   // scale the full 1080x1920 frame about (fx,fy), keep it covering the bw x bh box
@@ -117,7 +101,7 @@ const ChunkView: React.FC<{c: Chunk}> = ({c}) => {
   if (frame < f(start) || frame >= f(c.end)) return null;
   const out = interpolate(frame, [f(c.end) - 3, f(c.end)], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const keyLen = c.key ? c.key[1].length : 0;
-  const keySize = Math.min(210, 940 / (keyLen * 0.4));
+  const keySize = Math.min(210, 900 / (keyLen * 0.47));
   const y = c.y ?? 1180;
   return (
     <div style={{position: 'absolute', left: 0, width: W, top: y, display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -169,7 +153,7 @@ const blurAt = (frame: number) => {
   let b = 0;
   for (const c of BLUR_CUTS) {
     const d = Math.abs(frame - f(c));
-    if (d < 6) b = Math.max(b, 26 * Math.pow(1 - d / 6, 1.6));
+    if (d < 6) b = Math.max(b, 18 * Math.pow(1 - d / 6, 1.6));
   }
   return b;
 };
@@ -180,7 +164,7 @@ export const Luka: React.FC = () => {
   return (
     <AbsoluteFill style={{background: '#000'}}>
       <style>{fontCss}</style>
-      <AbsoluteFill style={{filter: `blur(${blur}px) saturate(0.86) contrast(1.06) brightness(0.97) sepia(0.07)`, transform: `scale(${1 + blur / 400})`}}>
+      <AbsoluteFill style={{filter: `blur(${blur}px) saturate(0.86) contrast(1.06) brightness(0.97) sepia(0.07)`}}>
         {SHOTS.map((s, i) => (
           <Sequence key={i} from={f(s.a)} durationInFrames={f(s.b) - f(s.a)}>
             <ShotView shot={s} />
