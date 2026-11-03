@@ -86,7 +86,7 @@ type Chunk = {small: [number, string][]; key?: [number, string]; end: number; y?
 const CHUNKS: Chunk[] = [
   {small: [[1.14, 'bu'], [1.34, 'gal'], [1.48, 'katta']], key: [1.92, 'o‘zgarishlar'], end: 2.55},
   {small: [[2.6, 'Avvalo,'], [3.12, 'bu']], key: [3.18, 'komplektimizni'], end: 3.66},
-  {small: [[3.7, 'ana'], [3.82, 'endi'], [4.08, 'sakkizta'], [4.4, 'emas,']], key: [4.66, 'o‘nta'], end: 5.48},
+  {small: [[3.7, 'ana'], [3.82, 'endi'], [4.08, 'sakkiztali'], [4.4, 'emas,']], key: [4.66, 'o‘ntali'], end: 5.48},
   {small: [[6.04, 'qismlari'], [6.4, 'ham'], [6.56, 'to‘liq']], key: [5.52, 'mexanizm'], end: 6.96},
   {small: [[7.0, 'to‘qqiz'], [7.5, 'shpomdan']], key: [7.86, 'ishlatdik'], end: 8.66},
   {small: [[8.72, 'Negaki,'], [9.24, 'ko‘rinish']], key: [9.78, 'jihatidan'], end: 10.55},
@@ -96,7 +96,7 @@ const CHUNKS: Chunk[] = [
   {small: [[15.4, 'qolgan']], key: [15.92, 'materiallari'], end: 17.15},
   {small: [[17.2, 'o‘tirganingizda'], [17.72, 'sizga']], key: [17.88, 'fiksatsiya'], end: 18.55},
   {small: [[18.6, 'bemalol'], [19.02, 'mazza'], [19.15, 'qilib']], key: [19.28, 'dam olib'], end: 20.02},
-  {small: [[20.08, 'bu'], [20.22, 'komplektimiz'], [20.86, 'bugun']], key: [21.36, 'o‘n kishilik'], end: 21.96},
+  {small: [[20.08, 'bu'], [20.22, 'komplektimiz'], [20.86, 'bu'], [21.04, 'gal']], key: [21.36, 'o‘n kishilik'], end: 21.96},
   {small: [[22.0, 'ana'], [22.32, 'endi'], [22.56, 'siz'], [22.66, 'bemalol']], key: [23.02, 'mehmonxonangizga'], end: 23.76, y: 930},
   {small: [[23.8, 'yoki-da']], key: [24.3, 'mini zalga'], end: 25.3, y: 930},
   {small: [[25.88, 'har'], [26.1, 'qayoqqa'], [26.36, 'qo‘yib']], key: [25.36, 'kuxnyaga'], end: 26.48},
